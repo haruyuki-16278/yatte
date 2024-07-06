@@ -1,0 +1,97 @@
+#!/bin/sh
+
+#################### variables ####################
+# shellcheck disable=SC2034
+RED='\033[31m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
+BLUE='\033[34m'
+MAGENTA='\033[35m'
+CYAN='\033[36m'
+WHITE='\033[37m'
+RESET='\033[0m'
+
+#################### functions ####################
+parse_args() {
+  for arg in "$@"; do
+    case "$arg" in
+      --help|-h)
+        cat <<EOF
+${CYAN}yatte${RESET} is a tool to run tasks defined in yatte.yml
+
+Usage:
+  - ${CYAN}yatte${RESET} <task-name>
+    run the task defined in yatte.yml
+
+  - ${CYAN}yatte${RESET} --help
+  - ${CYAN}yatte${RESET} -h
+    show this help
+
+  - ${CYAN}yatte${RESET} --here <task-name>
+    run the task defined in yatte.yml in the current directory
+
+Define tasks:
+  - commands
+    command can written like below
+    ---yatte.yml
+    hello: "echo 'hello world'"
+    ---
+
+  - args
+    ${CYAN}yatte${RESET} can understand these command-args
+    - \$1, \$2, ...
+      this will be the args passed to the command
+    - \$yatte_arg_<key> is a arg
+      this will be the passed values like --<key>=<value>
+
+    ---yatte.yml
+    calc: "echo \$1 + \$2"
+    callme: "echo \$yatte_arg_me"
+    ---
+EOF
+        exit 0
+        ;;
+      --here)
+        HERE=true
+        ;;
+      --*)
+        key=$(echo "$arg" | sed 's/^--//' | sed 's/=.*//')
+        if echo "$arg" | grep -q "="; then
+          value=$(echo "$arg" | sed 's/^--.*=//')
+        else
+          value=true
+        fi
+        eval "yatte_arg_$key"=\$value
+        ;;
+    esac
+  done
+}
+
+get_yaml_value() {
+  key=$1
+  grep "^$key:" yatte.yml | sed "s/^$key: //"
+}
+
+#################### main ####################
+parse_args "$@"
+
+# chdir to git project root directory
+if [ "$HERE" = true ]; then
+  cd "$(git rev-parse --show-toplevel)" || echo "run in $(pwd)"
+fi
+# check yatte.yml is exist
+if [ ! -f yatte.yml ]; then
+  echo "${RED}ERROR:${RESET} $(pwd)/yatte.yml not found"
+  exit 1
+fi
+
+# get task name
+task_name=$1
+shift
+
+# get target task
+target_task=$(get_yaml_value "$task_name")
+
+# run target task
+echo "${GREEN}RUN:${RESET} $target_task"
+eval "$target_task"

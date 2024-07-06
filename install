@@ -1,0 +1,22 @@
+#!/bin/sh
+
+#################### variables ####################
+# shellcheck disable=SC2034
+RED='\033[31m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
+BLUE='\033[34m'
+MAGENTA='\033[35m'
+CYAN='\033[36m'
+WHITE='\033[37m'
+RESET='\033[0m'
+
+#################### main ####################
+if ! command -v git >/dev/null 2>&1; then
+  echo "${RED}ERROR:${RESET} git command not found"
+  exit 1
+fi
+
+git clone https://github.com/haruyuki-16278/yatte.git ~/.yatte
+echo "export \$PATH:~/.yatte/bin"
+

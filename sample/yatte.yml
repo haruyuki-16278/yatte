@@ -1,0 +1,3 @@
+hello: echo "Hello, World!"
+sum: echo $(expr $1 + $2)
+callme: echo "Hello, $yatte_arg_me"
