@@ -16,18 +16,19 @@ parse_args() {
   for arg in "$@"; do
     case "$arg" in
       --help|-h)
-        cat <<EOF
-${CYAN}yatte${RESET} is a tool to run tasks defined in yatte.yml
+# shellcheck disable=SC2116
+        cat << EOF
+$(echo "${CYAN}yatte${RESET}") is a tool to run tasks defined in yatte.yml
 
 Usage:
-  - ${CYAN}yatte${RESET} <task-name>
+  - $(echo "${CYAN}yatte${RESET}") <task-name>
     run the task defined in yatte.yml
 
-  - ${CYAN}yatte${RESET} --help
-  - ${CYAN}yatte${RESET} -h
+  - $(echo "${CYAN}yatte${RESET}") --help
+  - $(echo "${CYAN}yatte${RESET}") -h
     show this help
 
-  - ${CYAN}yatte${RESET} --here <task-name>
+  - $(echo "${CYAN}yatte${RESET}") --here <task-name>
     run the task defined in yatte.yml in the current directory
 
 Define tasks:
@@ -38,7 +39,7 @@ Define tasks:
     ---
 
   - args
-    ${CYAN}yatte${RESET} can understand these command-args
+    $(echo "${CYAN}yatte${RESET}") can understand these command-args
     - \$1, \$2, ...
       this will be the args passed to the command
     - \$yatte_arg_<key> is a arg

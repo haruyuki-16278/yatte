@@ -5,7 +5,7 @@
 ## install
 
 ```sh
-curl -fsSL https://yatte.net | sh
+curl -fsSL https://yatte.net/install | sh
 ```
 
 ## usage

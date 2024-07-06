@@ -17,6 +17,31 @@ if ! command -v git >/dev/null 2>&1; then
   exit 1
 fi
 
-git clone https://github.com/haruyuki-16278/yatte.git ~/.yatte
-echo "export \$PATH:~/.yatte/bin"
+if [ -d ~/.yatte ]; then
+  echo "${RED}ERROR:${RESET} ~/.yatte already exists"
+  exit 1
+fi
 
+echo "${GREEN}INFO:${RESET} Cloning yatte to ~/.yatte"
+git clone https://github.com/haruyuki-16278/yatte.git ~/.yatte
+case $SHELL in
+  "/usr/bin/bash")
+    echo "export PATH=\$PATH:~/.yatte/bin" >> ~/.bashrc
+    ;;
+  "/usr/bin/zsh")
+    echo "export PATH=\$PATH:~/.yatte/bin" >> ~/.zshrc
+    ;;
+  *)
+# shellcheck disable=SC2116
+    cat <<EOF
+$(echo "${YELLOW}WARNING:${RESET}") $SHELL is not supported.
+Please add ~/.yatte/bin to your PATH manually.
+like: export PATH=\$PATH:~/.yatte/bin >> ~/.bashrc
+EOF
+    ;;
+esac
+
+echo "${GREEN}INFO:${RESET} Installed yatte to ~/.yatte/bin"
+export PATH="$PATH:~/.yatte/bin"
+
+echo "${GREEN}INFO:${RESET} Successfully installed ${CYAN}yatte${RESET}"
