@@ -26,10 +26,14 @@ echo "${GREEN}INFO:${RESET} Cloning yatte to ~/.yatte"
 git clone https://github.com/haruyuki-16278/yatte.git ~/.yatte
 case $SHELL in
   "/usr/bin/bash")
+    echo "# yatte" >> ~/.bashrc
     echo "export PATH=\$PATH:~/.yatte/bin" >> ~/.bashrc
+    echo "" >> ~/.bashrc
     ;;
   "/usr/bin/zsh")
+    echo "# yatte" >> ~/.zshrc
     echo "export PATH=\$PATH:~/.yatte/bin" >> ~/.zshrc
+    echo "" >> ~/.zshrc
     ;;
   *)
 # shellcheck disable=SC2116
