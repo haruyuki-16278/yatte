@@ -77,7 +77,7 @@ get_yaml_value() {
 parse_args "$@"
 
 # chdir to git project root directory
-if [ "$HERE" = true ]; then
+if [ ! "$HERE" ]; then
   cd "$(git rev-parse --show-toplevel)" || echo "run in $(pwd)"
 fi
 # check yatte.yml is exist
