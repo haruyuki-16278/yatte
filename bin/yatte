@@ -85,6 +85,10 @@ if [ ! -f yatte.yml ]; then
   echo "${RED}ERROR:${RESET} $(pwd)/yatte.yml not found"
   exit 1
 fi
+# load .env if .env is available
+if [ -f .env ]; then
+  . ./.env
+fi
 
 # get task name
 task_name=$1
