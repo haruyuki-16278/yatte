@@ -69,8 +69,20 @@ EOF
 }
 
 get_yaml_value() {
+  task_list=$(awk -F: '/^[a-zA-Z0-9_-]+:/ {printf "%s:%s, ", $1, NR}' yatte.yml)
   key=$1
-  grep "^$key:" yatte.yml | sed "s/^$key: //"
+  val=$(grep "^$key:" yatte.yml | sed "s/^$key: //")
+  if [ "$val" = "|" ]; then
+    from=$(($(echo "$task_list" | sed "s/^.*$key://" | sed "s/,.*//") + 1))
+    to=$(($(echo "$task_list" | sed "s/^.*$key:[0-9]\+,//" | sed "s/, .*//" | sed "s/^.*://") - 1))
+    task=$(sed -n "${from},${to}p" yatte.yml | sed ':a;N;$!ba;s/\\\n/ /g;s/\n/ \&\& /g' | sed "s/ \{2,\}/ /g" | sed "s/^ *//")
+    echo "$task"
+  elif [ "$val" = "" ]; then
+    echo "${RED}ERROR:${RESET} $key is not defined"
+    exit 1
+  else
+    echo "$val"
+  fi
 }
 
 #################### main ####################
