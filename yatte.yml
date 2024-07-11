@@ -1,0 +1,7 @@
+deploy-lambda: |
+  rm -f lambda/deploy-package.zip
+  zip -j -r lambda/deploy-package.zip lambda/index.mjs
+  aws lambda update-function-code \
+    --function-name $LAMBDA_FUNCTION_NAME \
+    --zip-file fileb://lambda/deploy-package.zip \
+    --region $LAMBDA_FUNCTION_REGION
