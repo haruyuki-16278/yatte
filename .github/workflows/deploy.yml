@@ -32,4 +32,4 @@ jobs:
 
       - name: Upload Install file to S3
         run: |
-          aws s3 cp install ${{ secrets.S3_URI }}/install
+          aws s3 cp install ${{ secrets.S3_URI }}/install --cache-control "max-age=0"
