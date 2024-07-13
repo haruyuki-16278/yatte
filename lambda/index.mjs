@@ -29,6 +29,7 @@ export const handler = async (event, _context) => {
 
   const s3Client = new S3Client({
     region: "ap-northeast-3",
+    signatureVersion: "v4",
   });
 
   const params = {
