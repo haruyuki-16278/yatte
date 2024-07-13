@@ -31,6 +31,11 @@ jobs:
           INSTALL_FILE_HASH=$(sha256sum install | cut -d ' ' -f 1)
           aws lambda update-function-configuration --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} --environment "Variables={INSTALL_FILE_HASH=$INSTALL_FILE_HASH, BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}, BUCKET_KEY=${{ secrets.BUCKET_KEY }}}"
 
+      - name: Publish new Lambda function version
+        run: |
+          NEW_VERSION=$(aws lambda publish-version --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} --query 'Version' --output text)
+          aws lambda update-alias --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} --name ${{ secrets.LAMBDA_ALIAS_NAME }} --function-version $NEW_VERSION
+
       - name: Upload Install file to S3
         run: |
           aws s3 cp install ${{ secrets.S3_URI }}/install --cache-control "max-age=0"
