@@ -28,7 +28,7 @@ jobs:
 
       - name: Update file hash on Lambda Environment
         run: |
-          aws lambda update-function-configuration --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} --environment Variables={INSTALL_FILE_HASH=$(sha256sum install | cut -d ' ' -f 1)}
+          aws lambda update-function-configuration --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} --environment Variables={INSTALL_FILE_HASH=$(sha256sum install | cut -d ' ' -f 1), BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}, BUCKET_KEY=${{ secrets.BUCKET_KEY }}}
 
       - name: Upload Install file to S3
         run: |
