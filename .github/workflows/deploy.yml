@@ -33,7 +33,20 @@ jobs:
 
       - name: Publish new Lambda function version
         run: |
-          NEW_VERSION=$(aws lambda publish-version --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} --query 'Version' --output text)
+          MAX_RETRIES=5
+          RETRY_COUNT=0
+          SLEEP_INTERVAL=30
+          until [ $RETRY_COUNT -ge $MAX_RETRIES ]
+          do
+            NEW_VERSION=$(aws lambda publish-version --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} --query 'Version' --output text) && break
+            RETRY_COUNT=$((RETRY_COUNT+1))
+            echo "Retry $RETRY_COUNT/$MAX_RETRIES: Waiting for $SLEEP_INTERVAL seconds before retrying..."
+            sleep $SLEEP_INTERVAL
+          done
+          if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+            echo "Failed to publish new version after $MAX_RETRIES attempts."
+            exit 1
+          fi
           aws lambda update-alias --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} --name ${{ secrets.LAMBDA_ALIAS_NAME }} --function-version $NEW_VERSION
 
       - name: Upload Install file to S3
