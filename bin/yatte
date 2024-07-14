@@ -55,6 +55,12 @@ EOF
       --here)
         HERE=true
         ;;
+      --update-yatte)
+        cd ~/.yatte/ || exit 1
+        git pull
+        echo "${CYAN}yatte${RESET} is updated"
+        exit 0
+        ;;
       --*)
         key=$(echo "$arg" | sed 's/^--//' | sed 's/=.*//')
         if echo "$arg" | grep -q "="; then
