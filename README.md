@@ -1,20 +1,45 @@
-# yatte
+# yatte (やって)
 
-"yatte" is a simple task runner
+"yatte" はShellScriptで開発されたシンプルなタスクランナーです。
 
-## install
+English README: [README_en.md](./docs/README_en.md)
+
+## インストール
+
+以下のコマンドでインストールできます。
 
 ```sh
 curl -fsSL https://yatte.net/install | sh
 ```
 
-## usage
+## 使い方
 
-1. create a `yatte.yml` file in your project root directory
-2. write your tasks in the `yatte.yml` file
-3. run your tasks by running `yatte <task-name>`
+1. プロジェクトのルートディレクトリに`yatte.yml`というファイルを作成します。
+2. `yatte.yml`にタスクを記述します。
+3. `yatte <task-name>`でタスクを実行します。
 
-## details
+### タスクの書き方
 
-- if you run `yatte` in a git project, it will chdir to the git project root directory and run the task.
-  - to escape this, you can run `yatte --here <task-name>`
+`yatte` はシンプルなyamlライクのファイルを解析してタスクを実行できます。  
+以下のような書き方ができます。
+
+```yaml
+# yatte.yml
+task-name: "echo 'hello world'"
+multiline-task: |
+  echo 'hello'
+  echo 'world'
+```
+
+### ヘルプ
+
+`yatte --help`でヘルプを表示できます。
+
+### アップデート
+
+`yatte --update-yatte`でアップデートできます。
+
+## 詳細
+
+- `yatte` は、Git管理化にあるディレクトリ内で実行された場合、Gitリポジトリのルートディレクトリに移動してタスクを実行します。
+  - タスクが実行されるディレクトリを現在のディレクトリとする場合は、`yatte --here <task-name>`とします。

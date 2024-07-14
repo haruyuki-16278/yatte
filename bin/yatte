@@ -31,24 +31,8 @@ Usage:
   - $(echo "${CYAN}yatte${RESET}") --here <task-name>
     run the task defined in yatte.yml in the current directory
 
-Define tasks:
-  - commands
-    command can written like below
-    ---yatte.yml
-    hello: "echo 'hello world'"
-    ---
-
-  - args
-    $(echo "${CYAN}yatte${RESET}") can understand these command-args
-    - \$1, \$2, ...
-      this will be the args passed to the command
-    - \$yatte_arg_<key> is a arg
-      this will be the passed values like --<key>=<value>
-
-    ---yatte.yml
-    calc: "echo \$1 + \$2"
-    callme: "echo \$yatte_arg_me"
-    ---
+  - $(echo "${CYAN}yatte${RESET}") --update-yatte
+    update yatte
 EOF
         exit 0
         ;;
