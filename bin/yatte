@@ -103,8 +103,14 @@ if [ -f .env ]; then
 fi
 
 # get task name
-task_name=$1
-shift
+task_name=""
+for arg in "$@"; do
+  # 引数が -- または - で始まらない場合
+  if [ "${arg#--}" = "$arg" ] && [ "${arg#-}" = "$arg" ]; then
+    task_name="$arg"
+    break
+  fi
+done
 
 # get target task
 target_task=$(get_yaml_value "$task_name")
